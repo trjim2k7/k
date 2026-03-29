@@ -2,9 +2,12 @@
 This module defines the main FastAPI application for the 'k' project.
 
 It includes a basic root endpoint that returns a welcome message.
+It also ensures that database tables are created on application startup.
 """
 
 from fastapi import FastAPI
+
+from database import create_all_tables  # Import the function to create database tables
 
 # Initialize the FastAPI application
 # You can add metadata like title, description, version for your API documentation
@@ -13,6 +16,19 @@ app = FastAPI(
     description="A basic FastAPI application for the 'k' project.",
     version="0.1.0",
 )
+
+
+@app.on_event("startup")
+async def startup_event() -> None:
+    """
+    Handles the startup event for the FastAPI application.
+
+    This function is called once when the application starts up.
+    It's used here to ensure all necessary database tables are created.
+    """
+    print("Application startup event: Creating database tables...")
+    create_all_tables()
+    print("Database tables created successfully.")
 
 
 @app.get("/", summary="Root endpoint", response_description="A welcome message")
