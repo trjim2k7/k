@@ -25,6 +25,15 @@ class Settings(BaseSettings):
     DB_NAME: str = Field(description="Name of the PostgreSQL database.")
     DB_USER: str = Field(description="Username for connecting to the PostgreSQL database.")
     DB_PASSWORD: SecretStr = Field(description="Password for connecting to the PostgreSQL database.")
+    DATABASE_ECHO: bool = Field(
+        default=False, description="If True, SQLAlchemy will log all SQL statements."
+    )
+    DATABASE_POOL_SIZE: int = Field(
+        default=10, description="The number of connections to keep in the connection pool."
+    )
+    DATABASE_MAX_OVERFLOW: int = Field(
+        default=20, description="The number of connections that can be opened beyond the pool_size."
+    )
 
     @property
     def DATABASE_URL(self) -> str:
